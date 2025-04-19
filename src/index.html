@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Scramble Game</title>
+</head>
+<body>
+    <h2>Word Scramble Game</h2>
+    <div id="gameArea">
+        <label for="nameInput">Enter your name:</label>
+        <input type="text" id="nameInput">
+        <button onclick="startGame()">Start</button>
+    </div>
+    <div id="gameContent" style="display:none;">
+        <p id="greeting"></p>
+        <p>Unscramble this word:</p>
+        <p id="scrambledWord"></p>
+        <input type="text" id="guessInput">
+        <button onclick="checkGuess()">Submit</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        const words = ["banana", "apple", "orange", "grapes", "kiwi"];
+        let currentWord = "";
+        let round = 0;
+        let playerName = "";
+
+        function shuffleWord(word) {
+            return word.split("").sort(() => Math.random() - 0.5).join("");
+        }
+
+        function startGame() {
+            playerName = document.getElementById("nameInput").value;
+            if (playerName.trim() === "") {
+                alert("Please enter your name!");
+                return;
+            }
+            document.getElementById("gameArea").style.display = "none";
+            document.getElementById("gameContent").style.display = "block";
+            document.getElementById("greeting").innerText = `Hello, ${playerName}! Let's play!`;
+            nextRound();
+        }
+
+        function nextRound() {
+            if (round >= 5) {
+                document.getElementById("result").innerText = `Game Over! Well done, ${playerName}!`;
+                return;
+            }
+            currentWord = words[round];
+            document.getElementById("scrambledWord").innerText = shuffleWord(currentWord);
+            document.getElementById("guessInput").value = "";
+            document.getElementById("result").innerText = "";
+        }
+
+        function checkGuess() {
+            const userGuess = document.getElementById("guessInput").value;
+            if (userGuess.toLowerCase() === currentWord) {
+                document.getElementById("result").innerText = "🎉 Correct! Moving to next round!";
+                round++;
+                setTimeout(nextRound, 1000);
+            } else {
+                document.getElementById("result").innerText = "❌ Try again!";
+            }
+        }
+    </script>
+</body>
+</html>
